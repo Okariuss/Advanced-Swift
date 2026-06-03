@@ -51,6 +51,7 @@ final class EmptyStateView: UIView {
         addSubview(iconImageView)
         addSubview(messageLabel)
         addSubview(descriptionLabel)
+        translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             iconImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -58,9 +59,9 @@ final class EmptyStateView: UIView {
             iconImageView.widthAnchor.constraint(equalToConstant: 80),
             iconImageView.heightAnchor.constraint(equalToConstant: 80),
             
-            messageLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: 16),
-            messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 24),
-            messageLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
+            messageLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: CVDesign.Spacing.spacing400),
+            messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: CVDesign.Spacing.spacing600),
+            messageLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -CVDesign.Spacing.spacing600),
             
             descriptionLabel.topAnchor.constraint(equalToSystemSpacingBelow: messageLabel.bottomAnchor, multiplier: 1),
             descriptionLabel.leadingAnchor.constraint(equalTo: messageLabel.leadingAnchor),
