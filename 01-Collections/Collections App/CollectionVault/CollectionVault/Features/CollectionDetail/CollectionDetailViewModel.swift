@@ -21,7 +21,7 @@ final class CollectionDetailViewModel {
     
     var onUpdate: (() -> Void)?
     
-    init(repository: CollectionRepositoryProtocol, collectionId: UUID, favoritesStore: FavoritesStore = FavoritesStore()) {
+    init(repository: CollectionRepositoryProtocol, collectionId: UUID, favoritesStore: FavoritesStore) {
         self.repository = repository
         self.collectionId = collectionId
         self.favoritesStore = favoritesStore
