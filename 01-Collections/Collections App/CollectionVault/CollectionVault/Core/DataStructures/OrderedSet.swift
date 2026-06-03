@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct OrderedSet<T: Hashable> {
+struct OrderedSet<T: Hashable & Codable>: Codable {
     
     private var array: [T] = []
     private var set: Set<T> = []
@@ -15,22 +15,20 @@ struct OrderedSet<T: Hashable> {
     init() {}
     
     mutating func insert(_ value: T) {
-        if set.contains(value) {
-            if let index = array.firstIndex(of: value) {
-                array.remove(at: index)
-            }
-        } else {
-            set.insert(value)
+        if set.insert(value).inserted {
+            array.append(value)
         }
-        array.insert(value, at: 0)
     }
     
-    mutating func remove(_ value: T) {
-        guard set.contains(value) else { return }
-        set.remove(value)
-        if let index = array.firstIndex(of: value) {
-            array.remove(at: index)
+    mutating func remove(_ value: IndexSet) {
+        for index in value {
+            if array.indices.contains(index) {
+                set.remove(array[index])
+            }
         }
+        
+        let rangeSet = RangeSet(value, within: array)
+        array.removeSubranges(rangeSet)
     }
     
     func contains(_ value: T) -> Bool {
@@ -47,5 +45,11 @@ struct OrderedSet<T: Hashable> {
     
     var isEmpty: Bool {
         array.isEmpty
+    }
+}
+
+extension OrderedSet: ExpressibleByArrayLiteral {
+    init(arrayLiteral elements: T...) {
+        elements.forEach { insert($0) }
     }
 }
