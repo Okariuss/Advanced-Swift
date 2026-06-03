@@ -22,4 +22,19 @@ enum L10N {
             return "collection_list.item.count".localized(count)
         }
     }
+    
+    enum CollectionDetail {
+        static let collectionDetailEmptyStateMessage = "collection_detail.empty_state.message".localized
+        static let collectionDetailEmptyStateDescription = "collection_detail.empty_state.description".localized
+        static let collectionDetailAlertAddTitle = "collection_detail.alert.add_title".localized
+        static let collectionDetailAlertAddMessage = "collection_detail.alert.add_message".localized
+        static let collectionDetailAlertAddTextField = "collection_detail.alert.add_text_field".localized
+        static func collectionDetailItemCount(_ count: Int) -> String {
+            return "collection_detail.item.count".localized(count)
+        }
+        static let collectionDetailCellDescription = "collection_detail.cell.description".localized
+        static func collectionDetailCellDescriptionError(_ count: Int) -> String {
+            return "collection_detail.cell.description.error".localized(count)
+        }
+    }
 }

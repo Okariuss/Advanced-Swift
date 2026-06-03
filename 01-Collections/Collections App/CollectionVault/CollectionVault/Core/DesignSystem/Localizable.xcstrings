@@ -36,7 +36,6 @@
       }
     },
     "app.name" : {
-      "comment" : "MARK: - General",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -49,6 +48,91 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Koleksiyonlar"
+          }
+        }
+      }
+    },
+    "collection_detail.alert.add_message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Title of the Collection:"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Koleksiyona eklenecek başlık:"
+          }
+        }
+      }
+    },
+    "collection_detail.alert.add_text_field" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Collection Title"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öğe Başlığı"
+          }
+        }
+      }
+    },
+    "collection_detail.alert.add_title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Collection"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeni Öğe"
+          }
+        }
+      }
+    },
+    "collection_detail.cell.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registered Item"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kayıtlı Öğe"
+          }
+        }
+      }
+    },
+    "collection_detail.cell.description.error" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duplicate (%d times)"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Çoklu Kayıt (%d kez)"
           }
         }
       }
@@ -105,7 +189,6 @@
       }
     },
     "collection_list.empty_state.message" : {
-      "comment" : "MARK: - Collection List",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -130,7 +213,7 @@
             "plural" : {
               "one" : {
                 "stringUnit" : {
-                  "state" : "needs_review",
+                  "state" : "translated",
                   "value" : "%d element"
                 }
               },
@@ -154,7 +237,7 @@
               },
               "other" : {
                 "stringUnit" : {
-                  "state" : "needs_review",
+                  "state" : "translated",
                   "value" : "%d öğe"
                 }
               }

@@ -19,7 +19,7 @@ final class CollectionDetailViewController: UIViewController {
         return tableView
     }()
     
-    private let emptyStateView = EmptyStateView(iconName: "square.stack.3d.up.slash", title: L10N.CollectionList.collectionListEmptyStateMessage, description: L10N.CollectionList.collectionListEmptyStateDescription)
+    private let emptyStateView = EmptyStateView(iconName: "square.stack.3d.up.slash", title: L10N.CollectionDetail.collectionDetailEmptyStateMessage, description: L10N.CollectionDetail.collectionDetailEmptyStateDescription)
 
     init(viewModel: CollectionDetailViewModel) {
         self.viewModel = viewModel
@@ -80,10 +80,10 @@ final class CollectionDetailViewController: UIViewController {
     }
     
     @objc private func addItemTapped() {
-        let alert = UIAlertController(title: "Yeni Öğe", message: "Koleksiyona eklenecek başlık:", preferredStyle: .alert)
-        alert.addTextField { $0.placeholder = "Öğe başlığı" }
-        alert.addAction(UIAlertAction(title: "İptal", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Ekle", style: .default) { [weak self] _ in
+        let alert = UIAlertController(title: L10N.CollectionDetail.collectionDetailAlertAddTitle, message: L10N.CollectionDetail.collectionDetailAlertAddMessage, preferredStyle: .alert)
+        alert.addTextField { $0.placeholder = L10N.CollectionDetail.collectionDetailAlertAddTextField }
+        alert.addAction(UIAlertAction(title: L10N.General.cancel, style: .cancel))
+        alert.addAction(UIAlertAction(title: L10N.General.add, style: .default) { [weak self] _ in
             guard let text = alert.textFields?.first?.text else { return }
             self?.viewModel.addItem(title: text)
         })
@@ -112,19 +112,17 @@ extension CollectionDetailViewController: UITableViewDelegate, UITableViewDataSo
         var config = cell.defaultContentConfiguration()
         config.text = item.title
         
-        // Mükerrer Kayıt (Duplicate) Uyarısı - O(1) Check
         let normalized = item.title.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         if let count = viewModel.duplicates[normalized], count > 1 {
-            config.secondaryText = "⚠️ Mükerrer Kayıt (\(count) kez)"
+            config.secondaryText = L10N.CollectionDetail.collectionDetailCellDescriptionError(count)
             config.secondaryTextProperties.color = CVDesign.Color.warning
         } else {
-            config.secondaryText = "Kayıtlı Öğe"
+            config.secondaryText = L10N.CollectionDetail.collectionDetailCellDescription
             config.secondaryTextProperties.color = CVDesign.Color.secondaryLabel
         }
         
         cell.contentConfiguration = config
         
-        // Favori Butonu (Apple HIG 44pt Touch Target)
         let favButton = UIButton(type: .custom)
         let favImage = UIImage(systemName: viewModel.isFavorite(id: item.id) ? "star.fill" : "star")
         favButton.setImage(favImage, for: .init())
