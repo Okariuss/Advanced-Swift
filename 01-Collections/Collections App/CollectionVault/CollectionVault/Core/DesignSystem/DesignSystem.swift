@@ -28,5 +28,6 @@ enum CVDesign {
         static let accent = UIColor.systemBlue
         static let destructive = UIColor.systemRed
         static let warning = UIColor.systemOrange
+        static let favorite = UIColor.systemYellow
     }
 }

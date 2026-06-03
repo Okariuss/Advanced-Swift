@@ -131,6 +131,12 @@ extension CollectionListViewController: UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        navigationController?.pushViewController(ViewController(), animated: true)
+        let collection = viewModel.collections[indexPath.row]
+        let detailViewModel = CollectionDetailViewModel(
+            repository: UserDefaultsCollectionRepository(),
+            collectionId: collection.id
+        )
+        let detailViewController = CollectionDetailViewController(viewModel: detailViewModel)
+        navigationController?.pushViewController(detailViewController, animated: true)
     }
 }

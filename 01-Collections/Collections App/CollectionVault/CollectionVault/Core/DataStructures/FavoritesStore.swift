@@ -8,10 +8,10 @@
 import Foundation
 
 final class FavoritesStore {
-    static let shared = FavoritesStore()
-    private init() {}
     
     private var storage = Set<UUID>()
+
+    init() {}    
     
     func toggle(_ id: UUID) {
         if storage.contains(id) {
@@ -23,5 +23,9 @@ final class FavoritesStore {
     
     func isFavorite(_ id: UUID) -> Bool {
         storage.contains(id)
+    }
+    
+    func favorites(in ids: [UUID]) -> Set<UUID> {
+        storage.intersection(ids)
     }
 }

@@ -10,5 +10,5 @@ import Foundation
 struct Collection: Identifiable, Codable {
     let id: UUID
     var name: String
-    var items: [VaultItem]
+    var items: OrderedSet<VaultItem>
 }

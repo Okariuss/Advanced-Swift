@@ -12,7 +12,9 @@ struct VaultItem: Identifiable, Codable, Hashable {
     var title: String
     var createdAt: Date
     
-    var isFavorite: Bool {
-        FavoritesStore.shared.isFavorite(id)
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case title
+        case createdAt
     }
 }
