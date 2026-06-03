@@ -11,6 +11,8 @@ enum L10N {
         static let appName = "app.name".localized
         static let cancel = "app.cancel".localized
         static let add = "app.add".localized
+        static let collections = "app.collections".localized
+        static let favorites = "app.favorites".localized
     }
     
     enum CollectionList {
@@ -36,5 +38,10 @@ enum L10N {
         static func collectionDetailCellDescriptionError(_ count: Int) -> String {
             return "collection_detail.cell.description.error".localized(count)
         }
+    }
+    
+    enum Favorites {
+        static let favoritesEmptyStateMessage = "favorites.empty_state.message".localized
+        static let favoritesEmptyStateDescription = "favorites.empty_state.description".localized
     }
 }

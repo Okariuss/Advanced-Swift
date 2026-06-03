@@ -10,9 +10,11 @@ import UIKit
 final class CollectionListViewController: UIViewController {
     
     private let viewModel: CollectionListViewModel
+    private let favoriesStore: FavoritesStore
     
-    init(viewModel: CollectionListViewModel) {
+    init(viewModel: CollectionListViewModel, favoritesStore: FavoritesStore) {
         self.viewModel = viewModel
+        self.favoriesStore = favoritesStore
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -134,7 +136,8 @@ extension CollectionListViewController: UITableViewDelegate, UITableViewDataSour
         let collection = viewModel.collections[indexPath.row]
         let detailViewModel = CollectionDetailViewModel(
             repository: UserDefaultsCollectionRepository(),
-            collectionId: collection.id
+            collectionId: collection.id,
+            favoritesStore: favoriesStore
         )
         let detailViewController = CollectionDetailViewController(viewModel: detailViewModel)
         navigationController?.pushViewController(detailViewController, animated: true)

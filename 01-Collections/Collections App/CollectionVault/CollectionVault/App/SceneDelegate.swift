@@ -16,15 +16,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
         
-        let repository = UserDefaultsCollectionRepository()
-        let viewModel = CollectionListViewModel(repository: repository)
-        let rootVC = CollectionListViewController(viewModel: viewModel)
-        
-        let navigationController = UINavigationController(rootViewController: rootVC)
-        navigationController.navigationBar.prefersLargeTitles = true
-        
-        window.rootViewController = navigationController
+        let coordinator = AppCoordinator(window: window, container: AppContainer())
+        coordinator.start()
         self.window = window
-        window.makeKeyAndVisible()
     }
 }
