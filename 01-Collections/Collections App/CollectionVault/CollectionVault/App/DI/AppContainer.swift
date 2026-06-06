@@ -7,12 +7,12 @@
 
 protocol AppContainerProtocol: AnyObject {
     var repository: CollectionRepositoryProtocol { get }
-    var favoritesStore: FavoritesStore { get }
+    var favoritesStore: FavoritesStoreProtocol { get }
 }
 
-final class AppContainer {
+final class AppContainer: AppContainerProtocol {
     let repository: CollectionRepositoryProtocol
-    let favoritesStore: FavoritesStore
+    let favoritesStore: FavoritesStoreProtocol
     
     init() {
         self.repository = UserDefaultsCollectionRepository()

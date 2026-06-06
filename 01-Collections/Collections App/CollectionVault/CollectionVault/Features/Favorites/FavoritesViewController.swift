@@ -47,6 +47,7 @@ final class FavoritesViewController: UIViewController {
     
     private func setupUI() {
         title = L10N.General.favorites
+        navigationItem.largeTitleDisplayMode = .always
         view.backgroundColor = CVDesign.Color.bg
         
         setupTable()
@@ -96,17 +97,32 @@ extension FavoritesViewController: UITableViewDataSource, UITableViewDelegate {
         config.text = entry.item.title
         config.secondaryText = entry.collectionName
         config.secondaryTextProperties.color = CVDesign.Color.secondaryLabel
-        cell.contentConfiguration = config
+        config.image = UIImage(systemName: "folder.fill")
+        config.imageProperties.tintColor = CVDesign.Color.accent
         
         let favButton = UIButton(type: .custom)
-        favButton.setImage(UIImage(systemName: "star.fill"), for: .init())
-        favButton.tintColor = .systemYellow
+        favButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
+        favButton.tintColor = CVDesign.Color.favorite
         favButton.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
         favButton.addAction(UIAction { [weak self] _ in
             self?.viewModel.toggleFavorite(for: entry.item.id)
         }, for: .touchUpInside)
         
+        cell.contentConfiguration = config
         cell.accessoryView = favButton
+        // UX: Disclosure indicator göstererek tıklanabilir olduğunu göster
+        // accessoryView ile birlikte disclosure göstermek istersen: ayrı bir stack view gerekir.
+        // Alternatif: accessoryView'i kaldır, disclosure göster, detail sayfasında favorite toggle sun.
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        viewModel.selectItem(at: indexPath.row)
+    }
+    
+    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        guard !viewModel.favoriteItems.isEmpty else { return nil }
+        return L10N.Favorites.favoritesItemCount(viewModel.favoriteItems.count)
     }
 }

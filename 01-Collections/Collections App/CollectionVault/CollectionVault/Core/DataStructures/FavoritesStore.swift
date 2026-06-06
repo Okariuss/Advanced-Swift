@@ -7,11 +7,42 @@
 
 import Foundation
 
-final class FavoritesStore {
-    
-    private var storage = Set<UUID>()
+protocol FavoritesStoreProtocol: AnyObject {
+    func toggle(_ id: UUID)
+    func isFavorite(_ id: UUID) -> Bool
+    func favorites(in ids: [UUID]) -> Set<UUID>
+}
 
-    init() {}    
+protocol FavoritesPersistence {
+    func load() -> Set<UUID>
+    func save(_ ids: Set<UUID>)
+}
+
+final class UserDefaultsFavoritesPersistence: FavoritesPersistence {
+    private let key = "cv_favorites_store"
+    
+    func load() -> Set<UUID> {
+        guard let data = UserDefaults.standard.data(forKey: key),
+              let decoded = try? JSONDecoder().decode(Set<UUID>.self, from: data)
+        else { return [] }
+        return decoded
+    }
+    
+    func save(_ ids: Set<UUID>) {
+        guard let data = try? JSONEncoder().encode(ids) else { return }
+        UserDefaults.standard.set(data, forKey: key)
+    }
+}
+
+final class FavoritesStore: FavoritesStoreProtocol {
+    
+    private let persistence: FavoritesPersistence
+    private var storage: Set<UUID>
+    
+    init(persistence: FavoritesPersistence = UserDefaultsFavoritesPersistence()) {
+        self.persistence = persistence
+        self.storage = persistence.load()
+    }
     
     func toggle(_ id: UUID) {
         if storage.contains(id) {
@@ -19,6 +50,7 @@ final class FavoritesStore {
         } else {
             storage.insert(id)
         }
+        persistence.save(storage)
     }
     
     func isFavorite(_ id: UUID) -> Bool {
@@ -26,6 +58,6 @@ final class FavoritesStore {
     }
     
     func favorites(in ids: [UUID]) -> Set<UUID> {
-        storage.intersection(ids)
+        storage.intersection(Set(ids))
     }
 }
