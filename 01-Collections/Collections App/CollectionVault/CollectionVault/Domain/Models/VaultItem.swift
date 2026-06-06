@@ -12,9 +12,11 @@ struct VaultItem: Identifiable, Codable, Hashable {
     var title: String
     var createdAt: Date
     
-    private enum CodingKeys: String, CodingKey {
-        case id
-        case title
-        case createdAt
+    static func == (lhs: VaultItem, rhs: VaultItem) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }

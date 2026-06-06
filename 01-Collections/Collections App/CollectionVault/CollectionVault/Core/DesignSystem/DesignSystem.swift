@@ -16,15 +16,12 @@ enum CVDesign {
         static let spacing800: CGFloat = 32
     }
     
-    enum Radius {
-        static let cardRadius: CGFloat = 12
-    }
-    
     enum Color {
         static let bg = UIColor.systemBackground
         static let secondaryBG = UIColor.secondarySystemBackground
         static let label = UIColor.label
         static let secondaryLabel = UIColor.secondaryLabel
+        static let tertiaryLabel = UIColor.tertiaryLabel
         static let accent = UIColor.systemBlue
         static let destructive = UIColor.systemRed
         static let warning = UIColor.systemOrange

@@ -11,17 +11,17 @@ final class CollectionDetailViewModel {
     private let repository: CollectionRepositoryProtocol
     private let collectionId: UUID
     private let duplicateService = DuplicateService()
-    private let favoritesStore: FavoritesStore
+    private let favoritesStore: FavoritesStoreProtocol
     
     private(set) var collection: Collection?
     private(set) var duplicates: [String: Int] = [:]
-    private(set) var duplicateLabels: [String: String] = [:]
-    
     private var allCollections: [Collection] = []
     
+    weak var coordinator: CollectionDetailNavigationDelegate?
+        
     var onUpdate: (() -> Void)?
     
-    init(repository: CollectionRepositoryProtocol, collectionId: UUID, favoritesStore: FavoritesStore) {
+    init(repository: CollectionRepositoryProtocol, collectionId: UUID, favoritesStore: FavoritesStoreProtocol) {
         self.repository = repository
         self.collectionId = collectionId
         self.favoritesStore = favoritesStore
@@ -34,6 +34,8 @@ final class CollectionDetailViewModel {
         onUpdate?()
     }
     
+    var collectionName: String { collection?.name ?? "" }
+    
     func addItem(title: String) {
         let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
         guard
@@ -44,10 +46,29 @@ final class CollectionDetailViewModel {
         }
         
         let newItem = VaultItem(id: UUID(), title: trimmed, createdAt: Date())
-        allCollections[index].items.insert(newItem)
+        allCollections[index].items.append(newItem)
+        save()
+    }
+    
+    func renameItem(at offset: Int, newTitle: String) {
+        let trimmed = newTitle.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty, let colIdx = collectionIndex() else { return }
         
-        repository.save(allCollections)
-        load()
+        let items = allCollections[colIdx].items.elements
+        guard items.indices.contains(offset) else { return }
+        
+        var updatedItem = items[offset]
+        updatedItem.title = trimmed
+        allCollections[colIdx].items.update(updatedItem)
+        save()
+    }
+    
+    func renameCollection(newName: String) {
+        let trimmed = newName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty, let index = collectionIndex() else { return }
+        
+        allCollections[index].name = trimmed
+        save()
     }
     
     func deleteItems(at offsets: IndexSet) {
@@ -55,8 +76,22 @@ final class CollectionDetailViewModel {
         
         allCollections[index].items.remove(offsets)
         
-        repository.save(allCollections)
-        load()
+        save()
+    }
+    
+    func didSelectItem(at index: Int) {
+        guard
+            let collection = collection,
+            collection.items.elements.indices.contains(index)
+        else { return }
+
+        let item = collection.items.elements[index]
+
+        coordinator?.navigateToItemDetail(
+            item: item,
+            collectionId: collection.id,
+            collectionName: collection.name
+        )
     }
     
     func isFavorite(id: UUID) -> Bool {
@@ -76,13 +111,16 @@ private extension CollectionDetailViewModel {
         allCollections.firstIndex { $0.id == collectionId }
     }
     
+    func save() {
+        repository.save(allCollections)
+        load()
+    }
+    
     func refreshDuplicates() {
         guard let items = collection?.items.elements else {
             duplicates = [:]
-            duplicateLabels = [:]
             return
         }
         duplicates = duplicateService.findDuplicates(in: items)
-        duplicateLabels = duplicateService.duplicateLabels(in: items)
     }
 }

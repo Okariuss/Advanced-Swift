@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct OrderedSet<T: Hashable & Codable>: Codable {
+struct OrderedSet<T: Hashable & Codable>: Equatable, Codable {
     
     private var array: [T] = []
     private var set: Set<T> = []
@@ -15,41 +15,61 @@ struct OrderedSet<T: Hashable & Codable>: Codable {
     init() {}
     
     mutating func insert(_ value: T) {
-        if set.insert(value).inserted {
-            array.append(value)
+        if set.contains(value) {
+            if let idx = array.firstIndex(of: value) {
+                array.remove(at: idx)
+            }
+        } else {
+            set.insert(value)
         }
+        array.insert(value, at: 0)
     }
     
-    mutating func remove(_ value: IndexSet) {
-        for index in value {
-            if array.indices.contains(index) {
-                set.remove(array[index])
-            }
+    @discardableResult
+    mutating func append(_ value: T) -> Bool {
+        let result = set.insert(value)
+        if result.inserted {
+            array.append(value)
+        }
+        return result.inserted
+    }
+    
+    mutating func remove(_ indexSet: IndexSet) {
+        var rangeSet = RangeSet<Int>()
+        for range in indexSet.rangeView {
+            rangeSet.insert(contentsOf: range)
         }
         
-        let rangeSet = RangeSet(value, within: array)
+        for index in indexSet where array.indices.contains(index) {
+            set.remove(array[index])
+        }
         array.removeSubranges(rangeSet)
+    }
+    
+    mutating func removeAll() {
+        array.removeAll()
+        set.removeAll()
+    }
+    
+    mutating func update(_ value: T) {
+        guard contains(value) else { return }
+        if let idx = array.firstIndex(of: value) {
+            array[idx] = value
+        }
+        set.update(with: value)
     }
     
     func contains(_ value: T) -> Bool {
         set.contains(value)
     }
     
-    var elements: [T] {
-        array
-    }
-    
-    var count: Int {
-        array.count
-    }
-    
-    var isEmpty: Bool {
-        array.isEmpty
-    }
+    var elements: [T] { array }
+    var count: Int { array.count }
+    var isEmpty: Bool { array.isEmpty }
 }
 
 extension OrderedSet: ExpressibleByArrayLiteral {
     init(arrayLiteral elements: T...) {
-        elements.forEach { insert($0) }
+        elements.forEach { append($0) }
     }
 }

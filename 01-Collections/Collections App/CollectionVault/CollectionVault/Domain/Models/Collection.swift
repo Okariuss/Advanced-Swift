@@ -7,8 +7,14 @@
 
 import Foundation
 
-struct Collection: Identifiable, Codable {
+struct Collection: Codable, Identifiable {
     let id: UUID
     var name: String
     var items: OrderedSet<VaultItem>
+    
+    init(id: UUID = UUID(), name: String, items: OrderedSet<VaultItem> = []) {
+        self.id = id
+        self.name = name
+        self.items = items
+    }
 }

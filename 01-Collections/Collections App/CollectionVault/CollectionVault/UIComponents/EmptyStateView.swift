@@ -12,7 +12,7 @@ final class EmptyStateView: UIView {
     private let iconImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.tintColor = .gray
+        imageView.tintColor = CVDesign.Color.tertiaryLabel
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -20,7 +20,7 @@ final class EmptyStateView: UIView {
     private let messageLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .label
+        label.textColor = CVDesign.Color.label
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = .preferredFont(forTextStyle: .title2)
@@ -30,7 +30,7 @@ final class EmptyStateView: UIView {
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .label
+        label.textColor = CVDesign.Color.secondaryLabel
         label.textAlignment = .center
         label.numberOfLines = 0
         label.font = .preferredFont(forTextStyle: .body)
@@ -55,7 +55,7 @@ final class EmptyStateView: UIView {
         
         NSLayoutConstraint.activate([
             iconImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            iconImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            iconImageView.topAnchor.constraint(equalTo: topAnchor),
             iconImageView.widthAnchor.constraint(equalToConstant: 80),
             iconImageView.heightAnchor.constraint(equalToConstant: 80),
             
@@ -65,13 +65,16 @@ final class EmptyStateView: UIView {
             
             descriptionLabel.topAnchor.constraint(equalToSystemSpacingBelow: messageLabel.bottomAnchor, multiplier: 1),
             descriptionLabel.leadingAnchor.constraint(equalTo: messageLabel.leadingAnchor),
-            descriptionLabel.trailingAnchor.constraint(equalTo: messageLabel.trailingAnchor)
+            descriptionLabel.trailingAnchor.constraint(equalTo: messageLabel.trailingAnchor),
+            descriptionLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
     
     func configure(iconName: String, title: String, description: String?) {
-        iconImageView.image = UIImage(systemName: iconName)
+        iconImageView.image = UIImage(systemName: iconName)?
+            .withConfiguration(UIImage.SymbolConfiguration(pointSize: 52, weight: .thin))
         messageLabel.text = title
         descriptionLabel.text = description
+        descriptionLabel.isHidden = description == nil
     }
 }

@@ -9,13 +9,15 @@ import Foundation
 
 final class FavoritesViewModel {
     private let repository: CollectionRepositoryProtocol
-    private let favoritesStore: FavoritesStore
+    private let favoritesStore: FavoritesStoreProtocol
     
-    private(set) var favoriteItems: [(item: VaultItem, collectionName: String)] = []
+    private(set) var favoriteItems: [(item: VaultItem, collectionId: UUID, collectionName: String)] = []
+    
+    weak var coordinator: FavoritesNavigationDelegate?
     
     var onUpdate: (() -> Void)?
     
-    init(repository: CollectionRepositoryProtocol, favoritesStore: FavoritesStore) {
+    init(repository: CollectionRepositoryProtocol, favoritesStore: FavoritesStoreProtocol) {
         self.repository = repository
         self.favoritesStore = favoritesStore
     }
@@ -29,7 +31,7 @@ final class FavoritesViewModel {
             
             return collection.items.elements
                 .filter { favIds.contains($0.id) }
-                .map { (item: $0, collectionName: collection.name) }
+                .map { (item: $0, collectionId: collection.id, collectionName: collection.name) }
         })
         
         onUpdate?()
@@ -42,5 +44,15 @@ final class FavoritesViewModel {
     
     func isFavorite(for itemId: UUID) -> Bool {
         favoritesStore.isFavorite(itemId)
+    }
+    
+    func selectItem(at index: Int) {
+        guard favoriteItems.indices.contains(index) else { return }
+        let entry = favoriteItems[index]
+        coordinator?.navigateToItemDetail(
+            item: entry.item,
+            collectionId: entry.collectionId,
+            collectionName: entry.collectionName
+        )
     }
 }
