@@ -22,6 +22,16 @@ How Swift's collection types actually work under the hood — and how to choose 
 
 ---
 
+### [02 — Optionals](./02-Optionals)
+A deep dive into Swift Optionals and the ideas behind them. Learn how Swift models the absence of a value in the type system and how to work with optionals safely, clearly, and efficiently.
+Playground
+Article
+[Optionals](./02-Optionals/Optionals.playground)
+[Advanced Swift: Optionals — The Billion-Dollar Mistake and Swift's Solution](https://medium.com/p/d7823ae544e3)
+**[NilSafeProfile](./02-Optionals/NilSafeProfile)** — a production-ready SwiftUI app built alongside the article. It demonstrates shorthand if let, optional chaining, lazy ?? evaluation, map and flatMap transformations, compactMap, Swift 6.2 string interpolation, custom !! safety operators, and intentional force-unwrapping in a real feature-based architecture. Every concept maps directly to the explanations in the article. → [See the full article ↔ code mapping](./02-Optionals/NilSafeProfile/README.md)
+
+---
+
 > More chapters coming soon.
 
 ---
